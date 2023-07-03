@@ -5,7 +5,7 @@ import "@suiet/wallet-kit/style.css"; // don't forget to import default styleshe
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import Form from "./Form";
-function createListingTxnBlock(x, y) {
+function createListingTxnBlock() {
   // define a programmable transaction block
   const txb = new TransactionBlock();
 
@@ -15,9 +15,8 @@ function createListingTxnBlock(x, y) {
   const contractModule = "advertisement";
   const contractMethod = "create";
 
-  const duration_ms = x;
-  const fee = y;
-  //need to fill
+  const duration_ms = "120000";
+  const fee = ""; //need to fill
   // const nftDescription = "Hello, Suiet NFT";
   // const nftImgUrl =
   //   "https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
@@ -40,7 +39,7 @@ function App() {
   async function handleFormSubmit(formData) {
     if (!wallet.connected) return;
 
-    const txb = createListingTxnBlock(formData.duration_ms, formData.fee);
+    const txb = createListingTxnBlock();
     try {
       // call the wallet to sign and execute the transaction
       const res = await wallet.signAndExecuteTransactionBlock({
@@ -56,14 +55,10 @@ function App() {
   }
   return (
     <div className="App">
-      {wallet.status === "connected" ? (
-        <Form onFormSubmit={handleFormSubmit} />
-      ) : (
-        <>
-          <h1 className="title">Hello, Suiet Wallet Kit</h1>
-          <ConnectButton />
-        </>
+      {wallet.status === "connected" && (
+        <button onClick={createAdvertisment}>create YourAdvertisment !</button>
       )}
+      <Form onFormSubmit={handleFormSubmit} />
     </div>
   );
 }

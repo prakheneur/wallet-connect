@@ -56,14 +56,10 @@ function App() {
   }
   return (
     <div className="App">
-      {wallet.status === "connected" ? (
-        <Form onFormSubmit={handleFormSubmit} />
-      ) : (
-        <>
-          <h1 className="title">Hello, Suiet Wallet Kit</h1>
-          <ConnectButton />
-        </>
+      {wallet.status === "connected" && (
+        <button onClick={createAdvertisment}>create YourAdvertisment !</button>
       )}
+      <Form onFormSubmit={handleFormSubmit} />
     </div>
   );
 }

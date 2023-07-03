@@ -5,7 +5,8 @@ import "@suiet/wallet-kit/style.css"; // don't forget to import default styleshe
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import Form from "./Form";
-function createListingTxnBlock(x, y) {
+
+function createListingTxnBlock(duration_ms, fee) {
   // define a programmable transaction block
   const txb = new TransactionBlock();
 
@@ -15,21 +16,18 @@ function createListingTxnBlock(x, y) {
   const contractModule = "advertisement";
   const contractMethod = "create";
 
-  const duration_ms = x;
-  const fee = y;
-  //need to fill
   // const nftDescription = "Hello, Suiet NFT";
   // const nftImgUrl =
   //   "https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
 
-  // txb.moveCall({
-  //   target: `${contractAddress}::${contractModule}::${contractMethod}`,
-  //   arguments: [
-  //     tx.pure(duration_ms),
-  //     tx.pure(fee),
-  //     //tx.pure(nftImgUrl),
-  //   ],
-  // });
+  txb.moveCall({
+    target: `${contractAddress}::${contractModule}::${contractMethod}`,
+    arguments: [
+      txb.pure(duration_ms),
+      txb.pure(fee),
+      //tx.pure(nftImgUrl),
+    ],
+  });
 
   return txb;
 }
@@ -50,31 +48,16 @@ function App() {
       alert("Congrats! your advertisement is listed!");
     } catch (e) {
       alert("Oops, listing failed");
-      console.error("listingfailed", e);
+      console.error("listing failed", e);
     }
     console.log("Form data:", formData);
   }
+
   return (
     <div className="App">
-      {wallet.status === "connected" ? (
-        <Form onFormSubmit={handleFormSubmit} />
-      ) : (
-        <>
-          <h1 className="title">Hello, Suiet Wallet Kit</h1>
-          <ConnectButton />
-        </>
-      )}
+      <Form onFormSubmit={handleFormSubmit} />
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1 className="title">Hello, Suiet Wallet Kit</h1>
-//       <ConnectButton />
-//     </div>
-//   );
-// }
 
 export default App;
