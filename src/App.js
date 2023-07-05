@@ -5,7 +5,9 @@ import "@suiet/wallet-kit/style.css"; // don't forget to import default styleshe
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import Form from "./Form";
-function createListingTxnBlock(x) {
+
+function createListingTxnBlock(/*x*/) {
+  //need to transfer time in days and convert it here
   // define a programmable transaction block
   const txb = new TransactionBlock();
 
@@ -15,8 +17,8 @@ function createListingTxnBlock(x) {
   const contractModule = "advertisement";
   const contractMethod = "create";
 
-  const duration_ms = x;
-  const fee = x * 300 + 10000;
+  const duration_ms = 12000;
+  const fee = 12000 * 300 + 10000;
   console.log("hey");
   const [coin] = txb.splitCoins(txb.gas, [txb.pure(fee)]);
   console.log("hey");
@@ -43,22 +45,24 @@ function App() {
   const wallet = useWallet();
 
   async function handleFormSubmit(formData) {
+    console.log("hey0");
+
     if (!wallet.connected) return;
 
-    const txb = createListingTxnBlock(formData.duration_ms);
-    try {
-      // call the wallet to sign and execute the transaction
-      const res = await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: txb,
-      });
-      console.log("listing created successfully!", res);
-      alert("Congrats! your advertisement is listed!");
-    } catch (e) {
-      alert("Oops, listing failed");
-      console.error("listingfailed", e);
-    }
-    console.log("Form data:", formData);
+    console.log("hey1");
+    const txb = createListingTxnBlock(/*formData.duration_ms*/);
+    console.log("hey2");
+    // call the wallet to sign and execute the transaction
+    const res = await wallet.signAndExecuteTransactionBlock({
+      transactionBlock: txb,
+    });
+    console.log("hey3");
+    console.log("listing created successfully!", res);
+    alert("Congrats! your advertisement is listed!");
+    console.log("hey4");
+    console.log("Form dataiuhiugiuhiuh:", formData);
   }
+
   return (
     <div className="App">
       {wallet.status === "connected" ? (
@@ -72,14 +76,4 @@ function App() {
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1 className="title">Hello, Suiet Wallet Kit</h1>
-//       <ConnectButton />
-//     </div>
-//   );
-// }
-
 export default App;
