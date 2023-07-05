@@ -5,7 +5,7 @@ import "@suiet/wallet-kit/style.css"; // don't forget to import default styleshe
 import { useWallet } from "@suiet/wallet-kit";
 import { TransactionBlock } from "@mysten/sui.js";
 import Form from "./Form";
-function createListingTxnBlock(x, y) {
+function createListingTxnBlock(x) {
   // define a programmable transaction block
   const txb = new TransactionBlock();
 
@@ -16,20 +16,25 @@ function createListingTxnBlock(x, y) {
   const contractMethod = "create";
 
   const duration_ms = x;
-  const fee = y;
+  const fee = x * 300 + 10000;
+  console.log("hey");
+  const [coin] = txb.splitCoins(txb.gas, [txb.pure(fee)]);
+  console.log("hey");
+  console.log(coin);
   //need to fill
   // const nftDescription = "Hello, Suiet NFT";
   // const nftImgUrl =
   //   "https://xc6fbqjny4wfkgukliockypoutzhcqwjmlw2gigombpp2ynufaxa.arweave.net/uLxQwS3HLFUailocJWHupPJxQsli7aMgzmBe_WG0KC4";
 
-  // txb.moveCall({
-  //   target: `${contractAddress}::${contractModule}::${contractMethod}`,
-  //   arguments: [
-  //     tx.pure(duration_ms),
-  //     tx.pure(fee),
-  //     //tx.pure(nftImgUrl),
-  //   ],
-  // });
+  txb.moveCall({
+    target: `${contractAddress}::${contractModule}::${contractMethod}`,
+    arguments: [
+      txb.pure(duration_ms),
+      coin,
+      txb.object("0x6"),
+      //tx.pure(nftImgUrl),
+    ],
+  });
 
   return txb;
 }
@@ -40,7 +45,7 @@ function App() {
   async function handleFormSubmit(formData) {
     if (!wallet.connected) return;
 
-    const txb = createListingTxnBlock(formData.duration_ms, formData.fee);
+    const txb = createListingTxnBlock(formData.duration_ms);
     try {
       // call the wallet to sign and execute the transaction
       const res = await wallet.signAndExecuteTransactionBlock({
