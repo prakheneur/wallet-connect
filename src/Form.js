@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./Form.css";
-const Form = () => {
-  const [contractAddress, setContractAddress] = useState("");
-  const [contractModule, setContractModule] = useState("");
-  const [contractMethod, setContractMethod] = useState("");
+
+const Form = ({ onFormSubmit }) => {
+  const [businessName, setContractAddress] = useState("");
+  const [businessType, setContractModule] = useState("");
+  const [productPrice, setContractMethod] = useState("");
   const [durationMs, setDurationMs] = useState("");
 
   const handleContractAddressChange = (e) => {
@@ -25,37 +26,41 @@ const Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(`Contract Address: ${contractAddress}`);
-    console.log(`Contract Module: ${contractModule}`);
-    console.log(`Contract Method: ${contractMethod}`);
-    console.log(`Duration (ms): ${durationMs}`);
+    // Perform your logic here using the form input values
+    const formData = {
+      businessName,
+      businessType,
+      productPrice,
+      durationMs,
+    };
 
-    // Perform your logic here using the contractAddress, contractModule, contractMethod, and durationMs values
+    // Call the onFormSubmit function from the prop and pass the form data
+    onFormSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="form-container">
       <input
         type="text"
-        value={contractAddress}
+        value={businessName}
         onChange={handleContractAddressChange}
-        placeholder="Enter contract address"
+        placeholder="Enter Business Name "
         className="input-field"
       />
 
       <input
         type="text"
-        value={contractModule}
+        value={businessType}
         onChange={handleContractModuleChange}
-        placeholder="Enter contract module"
+        placeholder="Enter Business Type"
         className="input-field"
       />
 
       <input
         type="text"
-        value={contractMethod}
+        value={productPrice}
         onChange={handleContractMethodChange}
-        placeholder="Enter contract method"
+        placeholder="Enter product price"
         className="input-field"
       />
 
@@ -75,3 +80,7 @@ const Form = () => {
 };
 
 export default Form;
+//
+//business type
+//product price
+//duration
